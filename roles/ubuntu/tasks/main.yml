@@ -1,0 +1,40 @@
+
+  - name: Install and configure NTP
+    package:
+      name: ntp
+      state: present
+
+  - name: Start and enable NTP service
+    service:
+      name: ntpd
+      state: started
+      enabled: yes
+
+  - name: Install required packages
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - openstack-packag1
+      - openstack-package2
+
+  - name: Install database server
+    package:
+      name: mariadb-server
+      state: present
+
+  - name: Install message queue server
+    package:
+      name: rabbitmq-server
+      state: present
+
+  - name: Install Memcached
+    package:
+      name: memcached
+      state: present
+
+  - name: Install Etcd
+    package:
+      name: etcd
+      state: present
+

@@ -1,0 +1,65 @@
+---
+- hosts: CentOS
+  become: true
+  tasks:
+
+  - name: Install and configure NTP
+    package:
+      name: chrony
+      state: present
+    tags: ntp
+
+  - name: Start and enable NTP service
+    service:
+      name: chronyd
+      state: started
+      enabled: yes
+    tags: ntp
+
+  - name: Enabling openstack repository
+    yum:
+      name: centos-release-openstack-train
+      state: latest
+
+  - name: Downloading and installing the RDO repository to enable openstack repository
+    yum:
+      name: https://rdoproject.org/repos/rdo-release.rpm
+      state: present
+    ignore_errors: true
+
+  - name: Updating repository and upgrading packages
+    yum:
+      name: '*'
+      state: latest
+      update_cache: true
+
+  - name: Installing openstack
+    yum:
+      name:
+        - openstack-selinux
+        - python-openstackclient
+        - openstack-utils
+
+  - name: Install and configure SQL Database
+    package:
+      name: mariadb-server
+      state: present
+    tags: sql-database
+
+  - name: Install and configure Message Queue
+    package:
+      name: rabbitmq-server
+      state: present
+    tags: message-queue
+
+  - name: Install and configure Memcached
+    package:
+      name: memcached
+      state: present
+    tags: memcached
+
+  - name: Install and configure Etcd
+    package:
+      name: etcd
+      state: present
+    tags: etcd
